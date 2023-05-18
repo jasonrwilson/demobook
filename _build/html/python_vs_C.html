@@ -1,0 +1,987 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Python vs C &#8212; Introduction to Parallel Programming</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python_vs_C';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example 1 : Hello World" href="intro_C.html" />
+    <link rel="prev" title="Introduction to Parallel Programming" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/virginia_tech_logo_vt.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/virginia_tech_logo_vt.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction to Parallel Programming
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Python vs C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_C.html">Example 1 : Hello World</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="arrays_control.html">Example 1 : Working with C Arrays and Control (for loops, if/else)</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="intro_omp.html">Intro to OpenMP</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fpython_vs_C.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/python_vs_C.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Python vs C</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-a-random-permutation-of-2500-numbers-to-sort">Generate a random permutation of 2500 numbers to sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-in-python-using-bubble-sort">Sort in Python using Bubble Sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-how-long-would-it-take-to-sort-5000-numbers-using-the-above-code">Estimate how long would it take to sort 5000 numbers using the above code.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hint-bubble-sort-takes-o-n-2-time">Hint : Bubble Sort takes O(<span class="math notranslate nohighlight">\(n^2\)</span>) time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-around-14-seconds">Answer : around 14 seconds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-try-5000-numbers">Let’s try 5000 numbers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-it-taking-so-long-to-sort-a-small-list">Why is it taking so long to sort a small list?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reason-1-bubble-sort-is-an-inefficient-algorithm">Reason 1 : Bubble Sort is an inefficient algorithm.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reason-2-native-python-code-is-very-slow">Reason 2 : Native Python code is very slow!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-this-book-we-will-learn-how-to-program-in-c">In this book we will learn how to program in C.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-can-run-c-programs-in-google-colab-using-the-file-system-and-command-line">We can run C programs in Google Colab using the <strong>file system</strong> and <strong>command line</strong>.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-start-by-learning-how-to-run-python-scripts-from-the-command-line">Let’s start by learning how to run Python scripts from the command line.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-script-for-generating-a-random-permutation">Python Script For Generating a Random Permutation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-can-view-the-file-containing-the-python-script-using-the-command-line">We can view the file containing the Python script using the command line.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-a-random-permutation-of-20-integers-and-write-result-to-a-file">Generate a Random Permutation of 20 integers and write result to a File</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-python-script-for-bubble-sort">A Python Script for Bubble Sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-20-integers-using-bubble-sort-in-python">Sort the file of 20 integers using Bubble Sort in Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-a-random-permutation-of-5000-integers-and-write-result-to-a-file">Generate a random permutation of 5000 integers and write result to a file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-5000-integers-using-bubble-sort-in-python-and-write-result-to-a-file">Sort the file of 5000 integers using Bubble Sort in Python and write result to a file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble-sort-in-c">Bubble Sort in C</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compile-the-c-bubble-sort-program">Compile the C Bubble Sort Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-5000-integers-using-bubble-sort-in-c-and-write-result-to-a-file">Sort the file of 5000 integers using Bubble Sort in C and write result to a file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-the-c-sorted-results-and-python-sorted-results-using-diff">Compare the C sorted results and Python sorted results using <strong>diff</strong>.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-use-the-c-program-to-sort-a-file-of-50000-integers">Let’s use the C program to sort a file of 50000 integers.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-optimized-compiler-to-compile-the-c-bubble-sort-program">Use Optimized Compiler to compile the C Bubble Sort Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-50000-integers-using-bubble-sort-compiled-with-the-optimizing-compiler">Sort the file of 50000 integers using Bubble Sort compiled with the optimizing compiler.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#for-comparison-purposes-let-s-use-the-python-script-to-sort-the-50000-integer-file">For comparison purposes let’s use the Python script to sort the 50000 integer file.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verify-that-the-outputs-match">Verify that the outputs match.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#since-native-python-is-so-slow-why-is-python-currently-the-most-popular-programming-language-for-data-science">Since native Python is so slow, why is Python currently the most popular programming language for data science?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-most-python-libraries-are-written-using-c-for-maximum-performance">Answer: Most Python libraries are written using C for maximum performance.</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="python-vs-c">
+<h1>Python vs C<a class="headerlink" href="#python-vs-c" title="Permalink to this heading">#</a></h1>
+<section id="generate-a-random-permutation-of-2500-numbers-to-sort">
+<h2>Generate a random permutation of 2500 numbers to sort<a class="headerlink" href="#generate-a-random-permutation-of-2500-numbers-to-sort" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">2500</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[ 341 2164  534 ...  765 2232  351]
+</pre></div>
+</div>
+</section>
+<section id="sort-in-python-using-bubble-sort">
+<h2>Sort in Python using Bubble Sort<a class="headerlink" href="#sort-in-python-using-bubble-sort" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
+<span class="c1"># Bubble sort the numbers</span>
+<span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">done</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[   0    1    2 ... 2497 2498 2499]
+CPU times: user 3.2 s, sys: 20 ms, total: 3.22 s
+Wall time: 3.52 s
+</pre></div>
+</div>
+</section>
+<section id="estimate-how-long-would-it-take-to-sort-5000-numbers-using-the-above-code">
+<h2>Estimate how long would it take to sort 5000 numbers using the above code.<a class="headerlink" href="#estimate-how-long-would-it-take-to-sort-5000-numbers-using-the-above-code" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="hint-bubble-sort-takes-o-n-2-time">
+<h2>Hint : Bubble Sort takes O(<span class="math notranslate nohighlight">\(n^2\)</span>) time<a class="headerlink" href="#hint-bubble-sort-takes-o-n-2-time" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="answer-around-14-seconds">
+<h2>Answer : around 14 seconds<a class="headerlink" href="#answer-around-14-seconds" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="let-s-try-5000-numbers">
+<h2>Let’s try 5000 numbers<a class="headerlink" href="#let-s-try-5000-numbers" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[1122  671  295 ... 4069 1057  792]
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">time</span>
+<span class="c1"># Bubble sort the numbers</span>
+<span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">done</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="nb">print</span> <span class="p">(</span><span class="n">numbers</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>[   0    1    2 ... 4997 4998 4999]
+CPU times: user 13.2 s, sys: 21.6 ms, total: 13.3 s
+Wall time: 13.9 s
+</pre></div>
+</div>
+</section>
+<section id="why-is-it-taking-so-long-to-sort-a-small-list">
+<h2>Why is it taking so long to sort a small list?<a class="headerlink" href="#why-is-it-taking-so-long-to-sort-a-small-list" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="reason-1-bubble-sort-is-an-inefficient-algorithm">
+<h2>Reason 1 : Bubble Sort is an inefficient algorithm.<a class="headerlink" href="#reason-1-bubble-sort-is-an-inefficient-algorithm" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="reason-2-native-python-code-is-very-slow">
+<h2>Reason 2 : Native Python code is very slow!<a class="headerlink" href="#reason-2-native-python-code-is-very-slow" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Python is interpreted rather than compiled.</p></li>
+<li><p>Python does run time type checking.</p></li>
+</ul>
+</section>
+<section id="in-this-book-we-will-learn-how-to-program-in-c">
+<h2>In this book we will learn how to program in C.<a class="headerlink" href="#in-this-book-we-will-learn-how-to-program-in-c" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>C is a compiled language.</p></li>
+<li><p>Since type checking is done at compile time C programs run fast.</p></li>
+</ul>
+</section>
+<section id="we-can-run-c-programs-in-google-colab-using-the-file-system-and-command-line">
+<h2>We can run C programs in Google Colab using the <strong>file system</strong> and <strong>command line</strong>.<a class="headerlink" href="#we-can-run-c-programs-in-google-colab-using-the-file-system-and-command-line" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="let-s-start-by-learning-how-to-run-python-scripts-from-the-command-line">
+<h2>Let’s start by learning how to run Python scripts from the command line.<a class="headerlink" href="#let-s-start-by-learning-how-to-run-python-scripts-from-the-command-line" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="python-script-for-generating-a-random-permutation">
+<h2>Python Script For Generating a Random Permutation<a class="headerlink" href="#python-script-for-generating-a-random-permutation" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Note that the code is not executed immediately.</p></li>
+<li><p>The code is written to the file <strong><a class="reference external" href="http://sample.py">sample.py</a></strong>.</p></li>
+<li><p>The script uses a <strong>command line argument</strong> to allow the user to specify n.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">sample</span><span class="o">.</span><span class="n">py</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;Not enough command line arguments.&quot;</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;# &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Overwriting sample.py
+</pre></div>
+</div>
+</section>
+<section id="we-can-view-the-file-containing-the-python-script-using-the-command-line">
+<h2>We can view the file containing the Python script using the command line.<a class="headerlink" href="#we-can-view-the-file-containing-the-python-script-using-the-command-line" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>cat</strong> is a Linux command that displays the contents of a file.</p></li>
+<li><p>Note that the ! tells Google Colab that what follows is a Linux command.</p></li>
+<li><p>The ! syntax is specific to Google Colab and we will not need it when we move to the ARC (advanced research cluster) here at VT.</p></li>
+<li><p>We can also display the file using the GUI interface.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!cat sample.py
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>import sys
+import numpy as np
+if (len(sys.argv) &lt; 2):
+    print (&quot;Not enough command line arguments.&quot;)
+    exit(1)
+n = int(sys.argv[1])
+numbers = np.random.permutation(n)
+print (&quot;# &quot;+str(n))
+for i in numbers:
+    print (i)
+</pre></div>
+</div>
+</section>
+<section id="generate-a-random-permutation-of-20-integers-and-write-result-to-a-file">
+<h2>Generate a Random Permutation of 20 integers and write result to a File<a class="headerlink" href="#generate-a-random-permutation-of-20-integers-and-write-result-to-a-file" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>We run the Python script <strong><a class="reference external" href="http://sample.py">sample.py</a></strong> from the command line.</p></li>
+<li><p>Rather than display the output immediately, we redirect the result to the file <strong>num20.txt</strong>.</p></li>
+<li><p>We can again use the <strong>cat</strong> command to display the result.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!python3 sample.py 20 &gt; num20.txt
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!cat num20.txt
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># 20
+9
+11
+0
+16
+10
+6
+4
+19
+5
+17
+14
+15
+7
+2
+13
+3
+1
+12
+18
+8
+</pre></div>
+</div>
+</section>
+<section id="a-python-script-for-bubble-sort">
+<h2>A Python Script for Bubble Sort<a class="headerlink" href="#a-python-script-for-bubble-sort" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">bubble</span><span class="o">.</span><span class="n">py</span>
+
+<span class="c1"># read the numbers from standard input into a python array</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">n</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span>
+
+<span class="c1"># Bubble sort</span>
+<span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">while</span> <span class="p">(</span><span class="n">done</span> <span class="o">==</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">done</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">temp</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span>
+            <span class="n">done</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># print the result one number per line</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;# &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">numbers</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Overwriting bubble.py
+</pre></div>
+</div>
+</section>
+<section id="sort-the-file-of-20-integers-using-bubble-sort-in-python">
+<h2>Sort the file of 20 integers using Bubble Sort in Python<a class="headerlink" href="#sort-the-file-of-20-integers-using-bubble-sort-in-python" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The file of unsorted integers is <strong>piped</strong> into the Python Script.</p></li>
+<li><p>The output is redirected to the file sorted20_python.txt.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!cat num20.txt | python3 bubble.py &gt; sorted20_python.txt
+!cat sorted20_python.txt
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span># 20
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+</pre></div>
+</div>
+</section>
+<section id="generate-a-random-permutation-of-5000-integers-and-write-result-to-a-file">
+<h2>Generate a random permutation of 5000 integers and write result to a file<a class="headerlink" href="#generate-a-random-permutation-of-5000-integers-and-write-result-to-a-file" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!python3 sample.py 5000 &gt; num5k.txt
+</pre></div>
+</div>
+</section>
+<section id="sort-the-file-of-5000-integers-using-bubble-sort-in-python-and-write-result-to-a-file">
+<h2>Sort the file of 5000 integers using Bubble Sort in Python and write result to a file<a class="headerlink" href="#sort-the-file-of-5000-integers-using-bubble-sort-in-python-and-write-result-to-a-file" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Note that we cut the runtime in half using a Python script.</p></li>
+<li><p>We can do much better using a compiled C program!</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%%time
+!cat num5k.txt | python3 bubble.py &gt; sorted5k_python.txt
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CPU times: user 78 ms, sys: 9.86 ms, total: 87.9 ms
+Wall time: 7.25 s
+</pre></div>
+</div>
+</section>
+<section id="bubble-sort-in-c">
+<h2>Bubble Sort in C<a class="headerlink" href="#bubble-sort-in-c" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Compare the C code that performs the bubble sort to the Python version.</p></li>
+</ul>
+<div class="highlight-C notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">bubble</span><span class="p">.</span><span class="n">c</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp"></span>
+
+<span class="kt">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="cm">/* read the numbers into a C array */</span>
+  <span class="kt">int</span> <span class="n">n</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">scanf</span> <span class="p">(</span><span class="s">&quot;%*c %d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">n</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="kt">int</span><span class="o">*</span> <span class="n">numbers</span> <span class="o">=</span> <span class="n">calloc</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+	  <span class="k">if</span> <span class="p">(</span><span class="n">scanf</span> <span class="p">(</span><span class="s">&quot;%d&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="cm">/* Bubble sort */</span>
+  <span class="kt">int</span> <span class="n">done</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">while</span> <span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">)</span> <span class="p">{</span>
+	  <span class="n">done</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+	  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="mi">-1</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+	    <span class="k">if</span> <span class="p">(</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+		    <span class="kt">int</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+		    <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+		    <span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">temp</span><span class="p">;</span>
+		    <span class="n">done</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	    <span class="p">}</span>
+	  <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="cm">/* print the result one number per line */</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;# %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">n</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+	  <span class="n">printf</span> <span class="p">(</span><span class="s">&quot;%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="n">numbers</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+  <span class="p">}</span>
+
+  <span class="cm">/* free the dynamically allocated numbers array and return */</span>
+  <span class="n">free</span> <span class="p">(</span><span class="n">numbers</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Overwriting bubble.c
+</pre></div>
+</div>
+</section>
+<section id="compile-the-c-bubble-sort-program">
+<h2>Compile the C Bubble Sort Program<a class="headerlink" href="#compile-the-c-bubble-sort-program" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>The name of the compiled C program is <strong>bubble</strong>.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o bubble bubble.c
+</pre></div>
+</div>
+</section>
+<section id="sort-the-file-of-5000-integers-using-bubble-sort-in-c-and-write-result-to-a-file">
+<h2>Sort the file of 5000 integers using Bubble Sort in C and write result to a file<a class="headerlink" href="#sort-the-file-of-5000-integers-using-bubble-sort-in-c-and-write-result-to-a-file" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>It takes the C program a fraction of a second to sort 5000 integers.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%%time
+!cat num5k.txt | ./bubble &gt; sorted5k_C.txt
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CPU times: user 11 ms, sys: 3 µs, total: 11 ms
+Wall time: 208 ms
+</pre></div>
+</div>
+</section>
+<section id="compare-the-c-sorted-results-and-python-sorted-results-using-diff">
+<h2>Compare the C sorted results and Python sorted results using <strong>diff</strong>.<a class="headerlink" href="#compare-the-c-sorted-results-and-python-sorted-results-using-diff" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Since <strong>diff</strong> produces the no output, the files are identical.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!diff sorted5k_python.txt sorted5k_C.txt
+</pre></div>
+</div>
+</section>
+<section id="let-s-use-the-c-program-to-sort-a-file-of-50000-integers">
+<h2>Let’s use the C program to sort a file of 50000 integers.<a class="headerlink" href="#let-s-use-the-c-program-to-sort-a-file-of-50000-integers" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Even though C is fast we are using an inefficient sorting O(<span class="math notranslate nohighlight">\(n^2\)</span>) algorithm.</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!python3 sample.py 50000 &gt; num50k.txt
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%%time
+!cat num50k.txt | ./bubble &gt; sorted50k_C.txt
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CPU times: user 153 ms, sys: 17 ms, total: 170 ms
+Wall time: 15.4 s
+</pre></div>
+</div>
+</section>
+<section id="use-optimized-compiler-to-compile-the-c-bubble-sort-program">
+<h2>Use Optimized Compiler to compile the C Bubble Sort Program<a class="headerlink" href="#use-optimized-compiler-to-compile-the-c-bubble-sort-program" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -O3 -o bubble_opt bubble.c
+</pre></div>
+</div>
+</section>
+<section id="sort-the-file-of-50000-integers-using-bubble-sort-compiled-with-the-optimizing-compiler">
+<h2>Sort the file of 50000 integers using Bubble Sort compiled with the optimizing compiler.<a class="headerlink" href="#sort-the-file-of-50000-integers-using-bubble-sort-compiled-with-the-optimizing-compiler" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%%time
+!cat num50k.txt | ./bubble_opt &gt; sorted50k_opt_C.txt
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CPU times: user 73.4 ms, sys: 11 ms, total: 84.4 ms
+Wall time: 7.35 s
+</pre></div>
+</div>
+</section>
+<section id="for-comparison-purposes-let-s-use-the-python-script-to-sort-the-50000-integer-file">
+<h2>For comparison purposes let’s use the Python script to sort the 50000 integer file.<a class="headerlink" href="#for-comparison-purposes-let-s-use-the-python-script-to-sort-the-50000-integer-file" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>It took 11 minutes and 44 seconds to run!</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%%time
+!cat num50k.txt | python3 bubble.py &gt; sorted50k_python.txt
+</pre></div>
+</div>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>CPU times: user 6.49 s, sys: 818 ms, total: 7.31 s
+Wall time: 11min 44s
+</pre></div>
+</div>
+</section>
+<section id="verify-that-the-outputs-match">
+<h2>Verify that the outputs match.<a class="headerlink" href="#verify-that-the-outputs-match" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!diff sorted50k_python.txt sorted50k_C.txt
+!diff sorted50k_python.txt sorted50k_opt_C.txt
+</pre></div>
+</div>
+</section>
+<section id="since-native-python-is-so-slow-why-is-python-currently-the-most-popular-programming-language-for-data-science">
+<h2>Since native Python is so slow, why is Python currently the most popular programming language for data science?<a class="headerlink" href="#since-native-python-is-so-slow-why-is-python-currently-the-most-popular-programming-language-for-data-science" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="answer-most-python-libraries-are-written-using-c-for-maximum-performance">
+<h2>Answer: Most Python libraries are written using C for maximum performance.<a class="headerlink" href="#answer-most-python-libraries-are-written-using-c-for-maximum-performance" title="Permalink to this heading">#</a></h2>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Introduction to Parallel Programming</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="intro_C.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Example 1 : Hello World</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-a-random-permutation-of-2500-numbers-to-sort">Generate a random permutation of 2500 numbers to sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-in-python-using-bubble-sort">Sort in Python using Bubble Sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-how-long-would-it-take-to-sort-5000-numbers-using-the-above-code">Estimate how long would it take to sort 5000 numbers using the above code.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hint-bubble-sort-takes-o-n-2-time">Hint : Bubble Sort takes O(<span class="math notranslate nohighlight">\(n^2\)</span>) time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-around-14-seconds">Answer : around 14 seconds</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-try-5000-numbers">Let’s try 5000 numbers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-it-taking-so-long-to-sort-a-small-list">Why is it taking so long to sort a small list?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reason-1-bubble-sort-is-an-inefficient-algorithm">Reason 1 : Bubble Sort is an inefficient algorithm.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reason-2-native-python-code-is-very-slow">Reason 2 : Native Python code is very slow!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-this-book-we-will-learn-how-to-program-in-c">In this book we will learn how to program in C.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-can-run-c-programs-in-google-colab-using-the-file-system-and-command-line">We can run C programs in Google Colab using the <strong>file system</strong> and <strong>command line</strong>.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-start-by-learning-how-to-run-python-scripts-from-the-command-line">Let’s start by learning how to run Python scripts from the command line.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-script-for-generating-a-random-permutation">Python Script For Generating a Random Permutation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-can-view-the-file-containing-the-python-script-using-the-command-line">We can view the file containing the Python script using the command line.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-a-random-permutation-of-20-integers-and-write-result-to-a-file">Generate a Random Permutation of 20 integers and write result to a File</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-python-script-for-bubble-sort">A Python Script for Bubble Sort</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-20-integers-using-bubble-sort-in-python">Sort the file of 20 integers using Bubble Sort in Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-a-random-permutation-of-5000-integers-and-write-result-to-a-file">Generate a random permutation of 5000 integers and write result to a file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-5000-integers-using-bubble-sort-in-python-and-write-result-to-a-file">Sort the file of 5000 integers using Bubble Sort in Python and write result to a file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bubble-sort-in-c">Bubble Sort in C</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compile-the-c-bubble-sort-program">Compile the C Bubble Sort Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-5000-integers-using-bubble-sort-in-c-and-write-result-to-a-file">Sort the file of 5000 integers using Bubble Sort in C and write result to a file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-the-c-sorted-results-and-python-sorted-results-using-diff">Compare the C sorted results and Python sorted results using <strong>diff</strong>.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#let-s-use-the-c-program-to-sort-a-file-of-50000-integers">Let’s use the C program to sort a file of 50000 integers.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#use-optimized-compiler-to-compile-the-c-bubble-sort-program">Use Optimized Compiler to compile the C Bubble Sort Program</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-file-of-50000-integers-using-bubble-sort-compiled-with-the-optimizing-compiler">Sort the file of 50000 integers using Bubble Sort compiled with the optimizing compiler.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#for-comparison-purposes-let-s-use-the-python-script-to-sort-the-50000-integer-file">For comparison purposes let’s use the Python script to sort the 50000 integer file.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#verify-that-the-outputs-match">Verify that the outputs match.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#since-native-python-is-so-slow-why-is-python-currently-the-most-popular-programming-language-for-data-science">Since native Python is so slow, why is Python currently the most popular programming language for data science?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#answer-most-python-libraries-are-written-using-c-for-maximum-performance">Answer: Most Python libraries are written using C for maximum performance.</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jason Wilson & Tim Warburton
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

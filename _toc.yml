@@ -4,7 +4,7 @@
 format: jb-book
 root: intro
 chapters:
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
-- file: mymarkdownfile
+- file: python_vs_C
+- file: intro_C
+- file: arrays_control
+- file: intro_omp

@@ -1,0 +1,1019 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Example 1 : Hello World &#8212; Introduction to Parallel Programming</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'intro_C';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example 1 : Working with C Arrays and Control (for loops, if/else)" href="arrays_control.html" />
+    <link rel="prev" title="Python vs C" href="python_vs_C.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/virginia_tech_logo_vt.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/virginia_tech_logo_vt.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction to Parallel Programming
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="python_vs_C.html">Python vs C</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Example 1 : Hello World</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="arrays_control.html">Example 1 : Working with C Arrays and Control (for loops, if/else)</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="intro_omp.html">Intro to OpenMP</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fintro_C.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/intro_C.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Example 1 : Hello World</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example 1 : Hello World</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-working-with-integers">Example 2 : Working with Integers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-the-limits-of-a-c-int">Example 3 : The Limits of a C int</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-working-with-long-integers">Example 4 : Working with Long Integers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-5-the-limits-of-a-c-long-int">Example 5 : The limits of a C long int</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-6-computing-the-average-of-two-numbers-first-attempt">Example 6 : Computing the Average of Two Numbers (first attempt)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-7-computing-the-average-of-two-numbers-second-attempt">Example 7 : Computing the Average of Two Numbers (second attempt)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-8-computing-the-average-of-two-numbers-third-attempt">Example 8 : Computing the Average of Two Numbers (third attempt)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-9-using-the-sizeof-command">Example 9 : Using the sizeof command</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-write-a-c-program-to-compute-the-average-of-4-integers">Exercise 1 : Write a C program to compute the average of 4 integers.</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="example-1-hello-world">
+<h1>Example 1 : Hello World<a class="headerlink" href="#example-1-hello-world" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>The %%writefile magic command is used to create our C source file.</p></li>
+<li><p>The C include file <em>stdio.h</em> gives the function headers (or interfaces) for C input/output functions such as <em>printf</em>.</p></li>
+<li><p>All C programs must have a <em>main</em> function.</p></li>
+<li><p>The main function has optional arguments related to command line argments (covered later).</p></li>
+<li><p>printf is short for print formatted.</p></li>
+<li><p>Optionally, you can add the statement <em>return 0;</em> to the end of main indicating a successful run.</p></li>
+<li><p>Note that C comments can be placed between /* and */</p></li>
+<li><p>In Google Colab all of our Linux shell commands start with !</p></li>
+<li><p>Exercise : The “\n” stands for newline.  Experiment with removing the “\n” from the printf statements.</p></li>
+<li><p>Exercise : Comment out line 7.  What do you observe?</p></li>
+<li><p>Exercise : Remove the semicolon from the end of line 6 and see what happens.  Practice with some other “syntax errors”.</p></li>
+<li><p>Exercise : Use <em>man stdio</em> to learn more the C standard input/output library.</p></li>
+<li><p>Exercise : Use the Linux shell command <em>whereis</em> to locate the file <em>stdio.h</em>.  Use the Linux shell command <em>grep</em> to search <em>stdio.h</em> for <em>printf</em>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">hello</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;Hello World!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;How are you today?</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="o">/*</span> <span class="n">optional</span> <span class="p">:</span> <span class="n">indicates</span> <span class="n">a</span> <span class="n">successful</span> <span class="n">run</span> <span class="o">*/</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting hello.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o hello hello.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./hello
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hello World!
+How are you today?
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-2-working-with-integers">
+<h1>Example 2 : Working with Integers<a class="headerlink" href="#example-2-working-with-integers" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>The %d is a place holder for an integer</p></li>
+<li><p>Try to add 1 billion to 2 billion.  What do you observe?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="nb">sum</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2000000</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The sum of </span><span class="si">%d</span><span class="s2"> and </span><span class="si">%d</span><span class="s2"> is </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting sum.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o sum sum.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./sum
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The sum of 1000000 and 2000000 is 3000000
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-3-the-limits-of-a-c-int">
+<h1>Example 3 : The Limits of a C int<a class="headerlink" href="#example-3-the-limits-of-a-c-int" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>For many C compilers, a C integer is stored in memory as a sequence of 32 bits or 4 bytes (a byte is 8 bits).</p></li>
+<li><p>Since 1 bit is used for the sign, we can store <span class="math notranslate nohighlight">\(2^{31}\)</span> different non-negative integers as a C int.</p></li>
+<li><p>Since 0 uses up one of the <span class="math notranslate nohighlight">\(2^{31}\)</span> possibilities, the largest C integer we can store is
+$<span class="math notranslate nohighlight">\(2^{31} - 1 = 2147483647\)</span>$</p></li>
+<li><p>We can use all <span class="math notranslate nohighlight">\(2^{31}\)</span> bit combinations to store negative numbers so the smallest C integer we can store is
+$<span class="math notranslate nohighlight">\(-2^{31} = -2147483648\)</span>$</p></li>
+<li><p>The number of bytes used to store a C integer is compiler dependent.</p></li>
+<li><p>The C include file <em>limits.h</em> specifies some of these compiler dependent constants.</p></li>
+<li><p>For example, <em>INT_MAX</em> is a constant set to the largest C integer and <em>INT_MIN</em> is a constant set to the smallest C integer.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">limits</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;limits.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Largest C int is </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">INT_MAX</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Smallest C int is </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">INT_MIN</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting limits.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o limits limits.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./limits
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Largest C int is 2147483647
+Smallest C int is -2147483648
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-4-working-with-long-integers">
+<h1>Example 4 : Working with Long Integers<a class="headerlink" href="#example-4-working-with-long-integers" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>For many C compilers, a C long integer is stored in memory as a sequence of 64 bits or 8 bytes.</p></li>
+<li><p>The %ld is a place holder for a long integer</p></li>
+<li><p>Exercise.  Given that a long integer in C uses 64 bits (one of these is a sign bit) figure out the largest and smallest long integer.  Check your answers by printing out the constants <em>LONG_MAX</em> and <em>LONG_MIN</em> contained in the <em>limits.h</em> file.  Hint: Use Python to print the big numbers.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">lsum</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="n">long</span> <span class="nb">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1000000000</span><span class="p">;</span>
+  <span class="n">long</span> <span class="nb">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">2000000000</span><span class="p">;</span>
+  <span class="n">long</span> <span class="nb">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="p">;</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The sum of </span><span class="si">%ld</span><span class="s2"> and </span><span class="si">%ld</span><span class="s2"> is </span><span class="si">%ld</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting lsum.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o lsum lsum.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./lsum
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The sum of 1000000000 and 2000000000 is 3000000000
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-5-the-limits-of-a-c-long-int">
+<h1>Example 5 : The limits of a C long int<a class="headerlink" href="#example-5-the-limits-of-a-c-long-int" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>For many C compilers, a C long integer is stored in memory as a sequence of 64 bits or 8 bytes</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">limits</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;limits.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Largest C int is </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">INT_MAX</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Smallest C int is </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">INT_MIN</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Largest C long int is </span><span class="si">%ld</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">LONG_MAX</span><span class="p">);</span>
+  <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Smallest C long int is </span><span class="si">%ld</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">LONG_MIN</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting limits.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o limits limits.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./limits
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Largest C int is 2147483647
+Smallest C int is -2147483648
+Largest C long int is 9223372036854775807
+Smallest C long int is -9223372036854775808
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span><span class="o">**</span><span class="mi">63</span><span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9223372036854775807
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="mi">2</span><span class="o">**</span><span class="mi">63</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9223372036854775808
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-6-computing-the-average-of-two-numbers-first-attempt">
+<h1>Example 6 : Computing the Average of Two Numbers (first attempt)<a class="headerlink" href="#example-6-computing-the-average-of-two-numbers-first-attempt" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Try to use the program to compute the average of 3 and 4.  What do you observe?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">average</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The average of </span><span class="si">%d</span><span class="s2"> and </span><span class="si">%d</span><span class="s2"> is </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting average.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o average average.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./average
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The average of 3 and 5 is 4
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-7-computing-the-average-of-two-numbers-second-attempt">
+<h1>Example 7 : Computing the Average of Two Numbers (second attempt)<a class="headerlink" href="#example-7-computing-the-average-of-two-numbers-second-attempt" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Note that it is not enough just to change the type of the c variable to a float.</p></li>
+<li><p>When using printf, %f is a placeholder for the float type.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">average</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+  <span class="nb">float</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The average of </span><span class="si">%d</span><span class="s2"> and </span><span class="si">%d</span><span class="s2"> is </span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting average.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o average average.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./average
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The average of 3 and 4 is 3.000000
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-8-computing-the-average-of-two-numbers-third-attempt">
+<h1>Example 8 : Computing the Average of Two Numbers (third attempt)<a class="headerlink" href="#example-8-computing-the-average-of-two-numbers-third-attempt" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Exercise : We can control the number of decimal digits printed.  For example change the %f to %.2f.  What do you observe?</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">average</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="nb">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+  <span class="nb">float</span> <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">)</span><span class="o">/</span><span class="mf">2.0</span><span class="p">;</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The average of </span><span class="si">%d</span><span class="s2"> and </span><span class="si">%d</span><span class="s2"> is </span><span class="si">%f</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">c</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting average.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o average average.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./average
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The average of 3 and 4 is 3.500000
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-9-using-the-sizeof-command">
+<h1>Example 9 : Using the sizeof command<a class="headerlink" href="#example-9-using-the-sizeof-command" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>For many compilers a float is stored using 32 bits (or 4 bytes).</p></li>
+<li><p>If more precision and/or range is required you can use a double or a long double.</p></li>
+<li><p>For many compilers a double is stored using 64 bits (or 8 bytes).</p></li>
+<li><p>For many compilers a long double is stored using 128 bits (or 8 bytes).</p></li>
+<li><p>According to the C standard a long int must be at least 32 bits while a long long int must be at least 64 bits.</p></li>
+<li><p>Note that <em>long int</em> is the same as <em>long</em> and <em>long long int</em> is the same as <em>long long</em>.</p></li>
+<li><p>The C char and C short types are special integer types with very limited range but require less memory to store.</p></li>
+<li><p>There are unsigned versions of the integer types for storing only non-negative integers.<br />
+** They have a larger range since they do not require a sign bit.
+** For example the largest unsigned int is <span class="math notranslate nohighlight">\(2^{32}-1 = 4294967295\)</span>.</p></li>
+<li><p>As these sizes are completely compiler dependent it is a good idea to check them before deciding on which types to use for your projects.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">size</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C char requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="n">char</span><span class="p">));</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C short requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="n">short</span><span class="p">));</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C int requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="nb">int</span><span class="p">));</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C long int requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="n">long</span><span class="p">));</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C long long int requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="n">long</span> <span class="n">long</span><span class="p">));</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C float requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="nb">float</span><span class="p">));</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C double requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="n">double</span><span class="p">));</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;A C long double requires </span><span class="si">%ld</span><span class="s2"> bytes of storage</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">sizeof</span><span class="p">(</span><span class="n">long</span> <span class="n">double</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Overwriting size.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o size size.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./size
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>A C char requires 1 bytes of storage
+A C short requires 2 bytes of storage
+A C int requires 4 bytes of storage
+A C long int requires 8 bytes of storage
+A C long long int requires 8 bytes of storage
+A C float requires 4 bytes of storage
+A C double requires 8 bytes of storage
+A C long double requires 16 bytes of storage
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="exercise-1-write-a-c-program-to-compute-the-average-of-4-integers">
+<h1>Exercise 1 : Write a C program to compute the average of 4 integers.<a class="headerlink" href="#exercise-1-write-a-c-program-to-compute-the-average-of-4-integers" title="Permalink to this heading">#</a></h1>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="python_vs_C.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Python vs C</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="arrays_control.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Example 1 : Working with C Arrays and Control (for loops, if/else)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example 1 : Hello World</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-working-with-integers">Example 2 : Working with Integers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-the-limits-of-a-c-int">Example 3 : The Limits of a C int</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-working-with-long-integers">Example 4 : Working with Long Integers</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-5-the-limits-of-a-c-long-int">Example 5 : The limits of a C long int</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-6-computing-the-average-of-two-numbers-first-attempt">Example 6 : Computing the Average of Two Numbers (first attempt)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-7-computing-the-average-of-two-numbers-second-attempt">Example 7 : Computing the Average of Two Numbers (second attempt)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-8-computing-the-average-of-two-numbers-third-attempt">Example 8 : Computing the Average of Two Numbers (third attempt)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-9-using-the-sizeof-command">Example 9 : Using the sizeof command</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-write-a-c-program-to-compute-the-average-of-4-integers">Exercise 1 : Write a C program to compute the average of 4 integers.</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jason Wilson & Tim Warburton
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
