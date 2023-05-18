@@ -1,0 +1,927 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Example 1 : Working with C Arrays and Control (for loops, if/else) &#8212; Introduction to Parallel Programming</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'arrays_control';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Intro to OpenMP" href="intro_omp.html" />
+    <link rel="prev" title="Example 1 : Hello World" href="intro_C.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/virginia_tech_logo_vt.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/virginia_tech_logo_vt.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction to Parallel Programming
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="python_vs_C.html">Python vs C</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_C.html">Example 1 : Hello World</a></li>
+
+
+
+
+
+
+
+
+
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Example 1 : Working with C Arrays and Control (for loops, if/else)</a></li>
+
+
+
+
+
+
+
+<li class="toctree-l1"><a class="reference internal" href="intro_omp.html">Intro to OpenMP</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Farrays_control.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/arrays_control.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Example 1 : Working with C Arrays and Control (for loops, if/else)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example 1 : Working with C Arrays and Control (for loops, if/else)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-finding-the-smallest-and-largest-numbers-in-an-array">Example 2 : Finding the smallest and largest numbers in an array.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-finding-the-two-smallest-numbers-in-an-array">Example 3 : Finding the Two Smallest Numbers in an array.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-implementing-bubble-sort-with-a-while-loop">Example 4 : Implementing Bubble Sort with a While Loop</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-5-a-matrix-vector-product-using-nested-for-loops">Example 5 : A matrix vector product using nested for loops.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-write-a-c-program-to-find-the-3-smallest-numbers-in-an-array">Exercise 1 : Write a C program to find the 3 smallest numbers in an array.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-write-a-c-program-to-calculate-the-matrix-product-of-a-and-b">Exercise 2 : Write a C program to calculate the matrix product of A and B.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-write-a-c-program-to-compute-the-sample-mean-sample-variance-sample-standard-deviation-and-median-of-an-array-of-data">Exercise 3 : Write a C program to compute the sample mean, sample variance, sample standard deviation, and median of an array of data.</a></li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="example-1-working-with-c-arrays-and-control-for-loops-if-else">
+<h1>Example 1 : Working with C Arrays and Control (for loops, if/else)<a class="headerlink" href="#example-1-working-with-c-arrays-and-control-for-loops-if-else" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Arrays in C are 0 based (like Python).</p></li>
+<li><p>The values contained in an uninitialized array are arbitrary.
+** In particular, do not assume an uninitialized array contains all zeros.</p></li>
+<li><p>Cannot copy arrays using simple assignment.<br />
+** Use a for loop to copy arrays.</p></li>
+<li><p>We can “pretty print” an array using if/else inside the loop.</p></li>
+<li><p>C does not do runtime array bounds checking (unlike Python).
+** This improves performance but can result in difficult to find bugs.</p></li>
+<li><p>We will learn about functions later to avoid duplicating code.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">arrays</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">};</span>
+  <span class="nb">int</span> <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span> <span class="p">};</span>
+  <span class="nb">int</span> <span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+  <span class="nb">int</span> <span class="n">d</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+
+  <span class="o">/*</span> <span class="n">C</span> <span class="n">arrays</span> <span class="n">are</span> <span class="mi">0</span> <span class="n">based</span> <span class="o">*/</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;a[</span><span class="si">%d</span><span class="s2">] = </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+
+  <span class="o">/*</span> <span class="n">The</span> <span class="n">values</span> <span class="n">contained</span> <span class="ow">in</span> <span class="n">an</span> <span class="n">unitialized</span> <span class="n">array</span> <span class="n">are</span> <span class="n">arbitrary</span> <span class="o">*/</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;d[</span><span class="si">%d</span><span class="s2">] = </span><span class="si">%d</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+  
+  <span class="o">/*</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span><span class="p">;</span> <span class="n">this</span> <span class="n">code</span> <span class="n">will</span> <span class="n">cause</span> <span class="n">a</span> <span class="n">syntax</span> <span class="n">error</span> <span class="o">*/</span>
+
+  <span class="o">/*</span> <span class="n">use</span> <span class="n">a</span> <span class="k">for</span> <span class="n">loop</span> <span class="n">to</span> <span class="n">copy</span> <span class="n">an</span> <span class="n">array</span> <span class="o">*/</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="o">/*</span> <span class="n">use</span> <span class="n">a</span> <span class="k">for</span> <span class="n">loop</span> <span class="n">to</span> <span class="nb">print</span> <span class="n">an</span> <span class="n">array</span> <span class="o">*/</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;c = { &quot;</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot; }</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="o">/*</span> <span class="n">use</span> <span class="n">a</span> <span class="k">for</span> <span class="n">loop</span> <span class="n">to</span> <span class="n">add</span> <span class="n">two</span> <span class="n">arrays</span> <span class="o">*/</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="o">/*</span> <span class="n">use</span> <span class="n">a</span> <span class="k">for</span> <span class="n">loop</span> <span class="n">to</span> <span class="nb">print</span> <span class="n">an</span> <span class="n">array</span> <span class="o">*/</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;d = { &quot;</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">d</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot; }</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="o">/*</span> <span class="n">writing</span> <span class="n">beyond</span> <span class="n">the</span> <span class="n">end</span> <span class="n">of</span> <span class="n">an</span> <span class="n">array</span> <span class="n">can</span> <span class="n">corrupt</span> <span class="n">other</span> <span class="n">variables</span> <span class="o">*/</span>
+  <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;b = { &quot;</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">4</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot; }</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing arrays.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o arrays arrays.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./arrays
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>a[1] = 3
+d[2] = -1597841248
+c = { 4, 3, 2, 1 }
+d = { 5, 5, 5, 5 }
+b = { 10, 2, 3, 4 }
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-2-finding-the-smallest-and-largest-numbers-in-an-array">
+<h1>Example 2 : Finding the smallest and largest numbers in an array.<a class="headerlink" href="#example-2-finding-the-smallest-and-largest-numbers-in-an-array" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Use FLT_MAX and FLT_MIN to avoid special cases.
+** FLT_MAX is the largest possible number of float type.
+** FLT_MIN is the smallest possible number of float type.
+** These constants are defined in the C header file <em>float.h</em></p></li>
+<li><p>The %g in printf can be used to print variables of float type (instead of %f).</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">minmax</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;float.h&gt;</span>
+
+<span class="c1">#define N 10</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">float</span> <span class="n">num</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="mf">2.3</span><span class="p">,</span> <span class="mf">7.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">5.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">,</span> <span class="mf">6.1</span> <span class="p">};</span>
+  <span class="nb">float</span> <span class="nb">min</span> <span class="o">=</span> <span class="n">FLT_MAX</span><span class="p">;</span>
+  <span class="nb">float</span> <span class="nb">max</span> <span class="o">=</span> <span class="n">FLT_MIN</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nb">min</span> <span class="o">=</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nb">max</span> <span class="o">=</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The minimum number is </span><span class="si">%g</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="nb">min</span><span class="p">);</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The maximum number is </span><span class="si">%g</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="nb">max</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing minmax.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o minmax minmax.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./minmax
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The minimum number is -4.5
+The maximum number is 7.2
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-3-finding-the-two-smallest-numbers-in-an-array">
+<h1>Example 3 : Finding the Two Smallest Numbers in an array.<a class="headerlink" href="#example-3-finding-the-two-smallest-numbers-in-an-array" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>If the <span class="math notranslate nohighlight">\(i^{th}\)</span> number is less than the current smallest:
+** second smallest = smallest
+** smallest = <span class="math notranslate nohighlight">\(i^{th}\)</span> number</p></li>
+<li><p>Else If the <span class="math notranslate nohighlight">\(i^{th}\)</span> number is less than the second smallest:
+** second smallest = <span class="math notranslate nohighlight">\(i^{th}\)</span> number</p></li>
+<li><p>Exercise : modify the code to handle duplicates correctly.<br />
+** To test your code, replace the -0.7 in the array with -4.5.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">smallest2</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;float.h&gt;</span>
+
+<span class="c1">#define N 10</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">float</span> <span class="n">num</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="o">-</span><span class="mf">2.3</span><span class="p">,</span> <span class="mf">7.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mf">2.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">5.3</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">,</span> <span class="mf">6.1</span> <span class="p">};</span>
+  <span class="nb">float</span> <span class="nb">min</span> <span class="o">=</span> <span class="n">FLT_MAX</span><span class="p">;</span>
+  <span class="nb">float</span> <span class="nb">next</span> <span class="o">=</span> <span class="n">FLT_MAX</span><span class="p">;</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">min</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nb">next</span> <span class="o">=</span> <span class="nb">min</span><span class="p">;</span>
+      <span class="nb">min</span> <span class="o">=</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="nb">next</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nb">next</span> <span class="o">=</span> <span class="n">num</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The smallest number is </span><span class="si">%g</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="nb">min</span><span class="p">);</span>
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;The next smallest number is </span><span class="si">%g</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="nb">next</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing smallest2.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o smallest2 smallest2.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./smallest2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The smallest number is -4.5
+The next smallest number is -2.3
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-4-implementing-bubble-sort-with-a-while-loop">
+<h1>Example 4 : Implementing Bubble Sort with a While Loop<a class="headerlink" href="#example-4-implementing-bubble-sort-with-a-while-loop" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>In one round of bubble sort, adjacent numbers are swapped if they are out of order.</p></li>
+<li><p>Rounds are repeated until the list is sorted.
+** Can detect a sorted list one a round does not require any swaps.
+** Natural to use a <em>while loop</em> since the number of rounds that will be required is unknown.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>%%writefile bubble.c
+
+#include &lt;stdio.h&gt;
+
+#define N 10
+
+int main () {
+  float num[N] = { -2.3, 7.2, -4.5, 1.6, 2.3, -0.7, 5.3, 0.9, 3.4, 6.1 };
+  int done = 0;
+  while (!done) {
+    done = 1;
+    for (int i=0;i&lt;N-1;i++) {
+      if (num[i] &gt; num[i+1]) {
+        float temp = num[i];
+        num[i] = num[i+1];
+        num[i+1] = temp;
+        done = 0;
+      }
+    }
+  }
+  printf (&quot;num = { &quot;);
+  for (int i=0;i&lt;N;i++) {
+    printf (&quot;%g&quot;,num[i]);
+    if (i &lt; N-1) {
+      printf (&quot;, &quot;);
+    } else {
+      printf (&quot; }\n&quot;);
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing bubble.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o bubble bubble.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./bubble
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>num = { -4.5, -2.3, -0.7, 0.9, 1.6, 2.3, 3.4, 5.3, 6.1, 7.2 }
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="example-5-a-matrix-vector-product-using-nested-for-loops">
+<h1>Example 5 : A matrix vector product using nested for loops.<a class="headerlink" href="#example-5-a-matrix-vector-product-using-nested-for-loops" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Two dimensional arrays in C are initialized row by row (like Python).</p></li>
+<li><p>Use <span class="math notranslate nohighlight">\(A[i][j]\)</span> to access the array entry in the <span class="math notranslate nohighlight">\(i^{th}\)</span> row and <span class="math notranslate nohighlight">\(j^{th}\)</span> column of <span class="math notranslate nohighlight">\(A\)</span> (both indices are 0 based).</p></li>
+<li><p>The <span class="math notranslate nohighlight">\(i^{th}\)</span> component (or row) of <span class="math notranslate nohighlight">\(Ax\)</span> is <span class="math notranslate nohighlight">\(A[i][0] \, x[0] + A[i][1] \, x[1] + ... + A[i][N-1] \, x[N-1]\)</span>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">writefile</span> <span class="n">matvec</span><span class="o">.</span><span class="n">c</span>
+
+<span class="c1">#include &lt;stdio.h&gt;</span>
+
+<span class="c1">#define N 5</span>
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nb">int</span> <span class="n">A</span><span class="p">[</span><span class="n">N</span><span class="p">][</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="p">},</span> <span class="p">{</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">},</span> <span class="p">{</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">},</span>
+                <span class="p">{</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="p">},</span> <span class="p">{</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">}</span> <span class="p">};</span>
+  <span class="nb">int</span> <span class="n">x</span><span class="p">[</span><span class="n">N</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+  <span class="nb">int</span> <span class="n">Ax</span><span class="p">[</span><span class="n">N</span><span class="p">];</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">Ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Ax</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;Ax = { &quot;</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="nb">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="n">N</span><span class="p">;</span><span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span><span class="n">Ax</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="n">printf</span> <span class="p">(</span><span class="s2">&quot; }</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Writing matvec.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!gcc -o matvec matvec.c
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>!./matvec
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Ax = { 27, 31, 30, 24, 23 }
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="exercise-1-write-a-c-program-to-find-the-3-smallest-numbers-in-an-array">
+<h1>Exercise 1 : Write a C program to find the 3 smallest numbers in an array.<a class="headerlink" href="#exercise-1-write-a-c-program-to-find-the-3-smallest-numbers-in-an-array" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>Be sure that your code correctly handles the case where the array contains duplicates.</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="exercise-2-write-a-c-program-to-calculate-the-matrix-product-of-a-and-b">
+<h1>Exercise 2 : Write a C program to calculate the matrix product of A and B.<a class="headerlink" href="#exercise-2-write-a-c-program-to-calculate-the-matrix-product-of-a-and-b" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>You can assume that <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> are both <span class="math notranslate nohighlight">\(N \times N\)</span> matrices.</p></li>
+<li><p><span class="math notranslate nohighlight">\(AB[i] [j]\)</span> is <span class="math notranslate nohighlight">\(A[i][0] \, B[0][j] + A[i][1] \, B[1][j] + ... + A[i][N-1] \, B[N-1][j]\)</span>.</p></li>
+<li><p>You will need to use 3 nested for loops.</p></li>
+</ul>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="exercise-3-write-a-c-program-to-compute-the-sample-mean-sample-variance-sample-standard-deviation-and-median-of-an-array-of-data">
+<h1>Exercise 3 : Write a C program to compute the sample mean, sample variance, sample standard deviation, and median of an array of data.<a class="headerlink" href="#exercise-3-write-a-c-program-to-compute-the-sample-mean-sample-variance-sample-standard-deviation-and-median-of-an-array-of-data" title="Permalink to this heading">#</a></h1>
+<ul class="simple">
+<li><p>The sample mean is <span class="math notranslate nohighlight">\(\bar{x} = \displaystyle\frac{1}{N} \displaystyle\sum_{i=1}^N x_i\)</span>.</p></li>
+<li><p>The sample variance is <span class="math notranslate nohighlight">\(\displaystyle\frac{1}{N-1} \displaystyle\sum_{i=1}^N (x_i - \bar{x})^2\)</span></p></li>
+<li><p>The sample standard deviation is the square root of the sample variance.<br />
+** To compute the square root in C use the <em>sqrt</em> function found in the <em>math.h</em> header file.</p></li>
+<li><p>To easily find the median, first sort the array.</p></li>
+<li><p>For extra credit, find the mode of the array of data.<br />
+** If all numbers have the same frequency, there is no mode.<br />
+** There can be a single mode or multiple modes.<br />
+** Be sure your code gracefully handles all possibilities.</p></li>
+</ul>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+                <footer class="bd-footer-article">
+                  
+<div class="footer-article-items footer-article__inner">
+  
+    <div class="footer-article-item"><!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro_C.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Example 1 : Hello World</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="intro_omp.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Intro to OpenMP</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div></div>
+  
+</div>
+
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Example 1 : Working with C Arrays and Control (for loops, if/else)</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-finding-the-smallest-and-largest-numbers-in-an-array">Example 2 : Finding the smallest and largest numbers in an array.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-3-finding-the-two-smallest-numbers-in-an-array">Example 3 : Finding the Two Smallest Numbers in an array.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-4-implementing-bubble-sort-with-a-while-loop">Example 4 : Implementing Bubble Sort with a While Loop</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#example-5-a-matrix-vector-product-using-nested-for-loops">Example 5 : A matrix vector product using nested for loops.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-1-write-a-c-program-to-find-the-3-smallest-numbers-in-an-array">Exercise 1 : Write a C program to find the 3 smallest numbers in an array.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-2-write-a-c-program-to-calculate-the-matrix-product-of-a-and-b">Exercise 2 : Write a C program to calculate the matrix product of A and B.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-3-write-a-c-program-to-compute-the-sample-mean-sample-variance-sample-standard-deviation-and-median-of-an-array-of-data">Exercise 3 : Write a C program to compute the sample mean, sample variance, sample standard deviation, and median of an array of data.</a></li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Jason Wilson & Tim Warburton
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
